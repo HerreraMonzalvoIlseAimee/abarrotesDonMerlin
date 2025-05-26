@@ -8,7 +8,7 @@ raiz.iconbitmap("frog.ico") ##icono
 
 raiz.geometry("800x400") ##tamaño
 raiz.config(bg= "black")
-Label(raiz, text= "ABARROTES\nDON\nMERLIN", fg="orange", bg="black",font=("Old English Text MT","34")).place(x=10,y=5)
+Label(raiz, text= "ABARROTES\nDON\nMERLIN", fg="orange", bg="black",font=("Old English Text MT","34")).place(x=38,y=5)
 Label(raiz, text= "BIENVENIDO\n:)", fg="white", bg="black",font=("Papyrus","34")).place(x=415,y=235)
 
 
@@ -31,7 +31,8 @@ botonIngU.place(relx=0.5,rely=0.95,anchor= "center")
 
 Label(frameUser, text= "Usuario:", fg="white", bg="grey",font=("Bahnschrift","15")).place(relx=0.1,rely=0.3)
 entryUsrU = Entry(frameUser).place(relx=0.5,rely=0.35)
-
+Label(frameUser, text= "Contraseña:", fg="white", bg="grey",font=("Bahnschrift","15")).place(relx=0.1,rely=0.6)
+entryUsrU = Entry(frameUser).place(relx=0.5,rely=0.65)
 
             #Frame Admin
 frameAdmin = Frame() 
@@ -49,5 +50,11 @@ Label(frameAdmin, text= "ADMIN", fg="orange", bg="grey",font=("Bahnschrift","25"
 
 botonIngU = Button(frameAdmin,text="Ingresar")
 botonIngU.place(relx=0.5,rely=0.95,anchor= "center")
+
+Label(frameAdmin, text= "Usuario:", fg="white", bg="grey",font=("Bahnschrift","15")).place(relx=0.1,rely=0.3)
+entryUsrU = Entry(frameAdmin).place(relx=0.5,rely=0.35)
+Label(frameAdmin, text= "Contraseña:", fg="white", bg="grey",font=("Bahnschrift","15")).place(relx=0.1,rely=0.6)
+entryUsrU = Entry(frameAdmin).place(relx=0.5,rely=0.65)
+
 
 raiz.mainloop()
