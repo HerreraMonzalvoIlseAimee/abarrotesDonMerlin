@@ -1,7 +1,17 @@
+import tkinter as tk
 from tkinter import *
 from PIL import Image, ImageTk
+import time
+
+def abrirVentana():
+    ventanaUsuario = Tk()
+    ventanaUsuario.geometry("1100x700")
+    ventanaUsuario.config(bg= "black")
+    ventanaUsuario.title("ABARROTES DON MERLíN")
+    raiz.destroy()
+    
 raiz=Tk()
-raiz.title("**ABARROTES DON MERLIN**") ##Titulo
+raiz.title("**INICIO: ABARROTES DON MERLIN**") ##Titulo
 raiz.resizable(True,True) ##redimensionar
 
 raiz.iconbitmap("frog.ico") ##icono
@@ -10,6 +20,7 @@ raiz.geometry("800x400") ##tamaño
 raiz.config(bg= "black")
 Label(raiz, text= "ABARROTES\nDON\nMERLIN", fg="orange", bg="black",font=("Old English Text MT","34")).place(x=38,y=5)
 Label(raiz, text= "BIENVENIDO\n:)", fg="white", bg="black",font=("Papyrus","34")).place(x=415,y=235)
+
 
 
             #Frame Usuarios
@@ -26,7 +37,7 @@ frameUser.config(width= "400",height = "200") ##tamaño frame
 
 Label(frameUser, text= "CLIENTE", fg="purple", bg="grey",font=("Bahnschrift","25")).place(x=10,y=5)
 
-botonIngU = Button(frameUser,text="Ingresar")
+botonIngU = Button(frameUser,text="Ingresar", command = abrirVentana)
 botonIngU.place(relx=0.5,rely=0.95,anchor= "center")
 
 Label(frameUser, text= "Usuario:", fg="white", bg="grey",font=("Bahnschrift","15")).place(relx=0.1,rely=0.3)
