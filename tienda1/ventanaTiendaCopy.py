@@ -7,8 +7,7 @@ from pythonds3 import *
 #------
 
 def mostrarVentana(ventanaPadre):  
-    valorRot=[None]  #para la funcion seleccionar()
-    
+    valorRot=[None]          
     def quicksortPrecios(inventario):  
         quicksortAux(inventario, 0, len(inventario)-1)
         return inventario
@@ -46,8 +45,8 @@ def mostrarVentana(ventanaPadre):
             etiqueta.grid(row=fila, column=0,padx=50)
             etiqueta2.grid(row=fila, column=1)
             fila+=1
-    def eliminarEtiquetas(master):
-        for widget in master.winfo_children():
+    def eliminarEtiquetas(menu):
+        for widget in menu.winfo_children():
             if isinstance(widget,CTkLabel):
                 widget.destroy()
             
@@ -101,92 +100,26 @@ def mostrarVentana(ventanaPadre):
         valorRot[0]=valor
         return miCola
 
-    def seleccionar(inventario,colaInventario,master):
+    def seleccionar(inventario,colaInventario):
         print(valorRot[0]) #ValorRot[0] es el que se imprime en frameCola
         for elemento in inventario:
-            producto = elemento[0].strip()
             if elemento[0] == valorRot[0]:
                 print(elemento)
-
-                if not os.path.exists("carrito.xlsx"):
-                    
-                    nuevo = openpyxl.Workbook()
-                    hoja = nuevo.active
-                    hoja.title = "Carrito"
-                    hoja.cell(row=1, column=1, value="Producto")
-                    hoja.cell(row=1, column=2, value="Precio")
-                    hoja.cell(row=1, column=3, value="Unidades")
-                    nuevo.save("carrito.xlsx")
-
-                carrillo = openpyxl.load_workbook("carrito.xlsx")
-                carrito = carrillo.active
-
-                encontrado = False
-                
-                for fila in range(2,carrito.max_row+1):
-                    if carrito.cell(row=fila,column=1).value == elemento[0]: #Si ya hay ese producto en carrito
-                        
-                        cantidad = carrito.cell(row=fila, column=3).value or 0 #solo aumenta unidades
-                        carrito.cell(row=fila,column=3, value = cantidad+1)
-                        encontrado=True
-                        break
+                archivo = open("carrito.xlsx","x")
+                carrito = openpyxl.load_workbook("carrito.xlsx")
+                for fila in carrito.iter_rows:
+                    for celda in fila:
+                        if celda.value == elemento[0]:
+                            carrito.cell(row=fila,column=3, value=value+1)
                             
-                if not encontrado: #Si no existe aun en la hoja#
-                    nuevaFila = carrito.max_row+1
-                    carrito.cell(row= nuevaFila+1,column=1, value= elemento[0])
-                    carrito.cell(row= nuevaFila+1,column=2, value= elemento[1])
-                    carrito.cell(row= nuevaFila+1,column=3, value=1)
-                        
-                carrillo.save("carrito.xlsx")
-                carrillo.close()
-                
-                carrito = importarCarrito()
-                imprimirCarrito(carrito,frameCarrito)
-# Funciones carrito ---------------------------------------------------------------
-    def importarCarrito():
-        mostrarCarrito=[]
-        archivo=openpyxl.load_workbook("carrito.xlsx")
-        hoja = archivo["Carrito"]
-        
-        fila=0
-        for i in range(2, hoja.max_row+1):
-            
-            celda="A"+str(i)
-            celda2="B"+str(i)
-            celda3= "C"+str(i)
-            
-            valor=hoja[celda].value
-            valor2=hoja[celda2].value
-            valor3=hoja[celda3].value
-     
-            mostrarCarrito.append([valor,valor2,valor3])
-        return mostrarCarrito
-    
-    def imprimirCarrito(carrito,frameCarrito):
-        fila=0
-        for data in carrito:
-            etiqueta1 = CTkLabel(master=frameCarrito,
-                                text=data[0],
-                                font=("Matura MT Script Capitals",16),
-                                text_color="#ee76ab")
-            etiqueta1.grid(row=fila, column=1)
-
-            etiqueta2 = CTkLabel(master=frameCarrito,
-                                text=data[1],
-                                font=("Matura MT Script Capitals",20),
-                                text_color="#ee76ab")
-            etiqueta2.grid(row=fila, column=2)
-            
-            etiqueta3 = CTkLabel(master=frameCarrito,
-                                text=data[2],
-                                font=("Matura MT Script Capitals",20),
-                                text_color="#ee76ab")
-            etiqueta3.grid(row=fila, column=3)
-            fila+=1
+                        else: #Si no existe aun en la hoja#
+                            carrito.cell(row=fila+1,column=1, value= elemento[0])
+                            carrito.cell(row=fila+1,column=2, value= elemento[1])
+                            carrito.cell(row=fila+1,column=3, value= value+1)        
                 
 #Ventana tienda -------------------------------------------------    
     ventanaTienda = CTk()
-    ventanaTienda.geometry("1400x720") ##tamaño
+    ventanaTienda.geometry("1300x720") ##tamaño
     ventanaTienda.title("**COMPRAR:") ##Titulo
     ventanaTienda.resizable(True,True) ##redimensionar
     ventanaTienda.configure(fg_color= "#d62957")
@@ -199,36 +132,36 @@ def mostrarVentana(ventanaPadre):
     tiendita = CTkLabel(ventanaTienda, text= "TIENDITA MAGIKA",
              text_color="#ffbfdb",
              bg_color="transparent",
-             font=("Old English Text MT",40))
+             font=("Old English Text MT",50))
     tiendita.grid(row=0,column=1,padx=20,pady=5)
     
     ##Frame menu de ingredientes---------------------------------
     menu = CTkFrame(master = ventanaTienda,
-                    width=600,
+                    width=550,
                     fg_color="#572e4f")
-    menu.grid(row=0,column=1, padx=10,pady= 50,sticky="nsew")
+    menu.grid(row=0,column=1, padx=10,pady= 150,sticky="nsew")
     
     menu.grid_columnconfigure((1,2),weight=1)
     menu.grid_rowconfigure((1),weight=1)
 
 #Frame menu2----------------------------------------------------
     menu2 = CTkFrame(master = ventanaTienda,
-                    width=850,
+                    width=600,
                     fg_color="#8e7e9a")
     menu2.grid(row=0,column=2, padx=10, pady=30, sticky="nsew")
 
     menu.grid_columnconfigure((0),weight=1)
-    menu2.grid_rowconfigure((1,2,3,4),weight=0)
+    menu2.grid_rowconfigure((1,2,3,4),weight=1)
     
     #Frame cola---------------------------------------------
     frameCola = CTkFrame(master=menu2,
-                    height=15,
+                    height=25,
                     fg_color="#572e4f")
     frameCola.grid(column=0,row=1,padx=10,sticky="nsew")
   
     #Frame botones----------------------------------
     frameColaBut = CTkFrame(master=menu2,
-                    height=25,
+                    height=30,
                     fg_color="#572e4f")
     frameColaBut.grid(column=0,row=2,pady=20,sticky="nsew")
 
@@ -237,12 +170,12 @@ def mostrarVentana(ventanaPadre):
     
     # Frame carrito-----------------------------------------
     frameCarrito= CTkFrame(master=menu2,
-                           height=500,
+                           height=400,
                            fg_color="#c7cae7")
     frameCarrito.grid(column=0,row=3,pady=5,sticky="nsew")
     
-    frameCarrito.grid_rowconfigure((1,2,3,4,5,6),weight=0)
-    frameCarrito.grid_columnconfigure((1,2,3,4),weight=1)
+    frameCarrito.grid_rowconfigure((0),weight=0)
+    frameCarrito.grid_columnconfigure((1),weight=1)
     
     # Frame botonesCarrito-----------------------------------------
     frameCarritoBut= CTkFrame(master=menu2,
@@ -261,15 +194,14 @@ def mostrarVentana(ventanaPadre):
     inventarioOrdenado=[]
     inventarioOrdenado=quicksortPrecios(inventario)
     colaInventario = crearColaInventario(inventarioOrdenado)
-    #Mostrar carrito------------------------------------------
-    carrito = []
        
-    #Botones Cola------------------------------------------
+    
+    #Botones ------------------------------------------
     
     ingredientesMenu=CTkButton(frameColaBut, text="Ordenar/$",
                             font=("Old English Text MT",30),
                             fg_color="#c66509",
-                            command= lambda: [quicksortPrecios(inventario),eliminarEtiquetas(menu), imprimirInventario(inventario,menu)])
+                            command= lambda: [quicksortPrecios(inventario),eliminarEtiquetas(menu), imprimirInventario(inventario,menu),ingredientesMenu.destroy()])
     ingredientesMenu.grid(row=0,column=2, padx=1,sticky="ew")
     
     
@@ -289,17 +221,9 @@ def mostrarVentana(ventanaPadre):
     selecProducto=CTkButton(frameColaBut, text="Seleccionar",
                             font=("Old English Text MT",25),
                             fg_color="#c66509",
-                            command = lambda:[seleccionar(inventario,colaInventario,frameCarrito)])
+                            command = lambda:[seleccionar(inventario,colaInventario)])
 
     selecProducto.grid(row=0,column=3, padx=1,sticky="ew")
-
-    #Botones Cola------------------------------------------
-    
-    ingredientesMenu=CTkButton(frameCarritoBut, text="Comprar",
-                            font=("Old English Text MT",30),
-                            fg_color="#c66509")
-    ingredientesMenu.grid(row=0,column=2, padx=1,sticky="sew")
-    
  
 #-----Comportamiento al cerrar:-------------------------------------------------------------------------------
     ventanaTienda.protocol("WM_DELETE_WINDOW", lambda: [ventanaTienda.destroy(),ventanaPadre.deiconify()])
